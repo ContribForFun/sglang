@@ -536,6 +536,8 @@ class GenerateReqInput:
         elif isinstance(self.sampling_params, dict):
             self.parallel_sample_num = self.sampling_params.get("n", 1)
         else:  # isinstance(self.sampling_params, list):
+            if not self.sampling_params:
+                raise ValueError("sampling_params cannot be an empty list.")
             self.parallel_sample_num = self.sampling_params[0].get("n", 1)
             for sampling_params in self.sampling_params:
                 if self.parallel_sample_num != sampling_params.get("n", 1):

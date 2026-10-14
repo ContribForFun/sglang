@@ -412,6 +412,16 @@ class TestGenerateReqInputNormalization(CustomTestCase):
             rid=["id1", "id2"],
         )
 
+    def test_empty_sampling_params_list_is_rejected(self):
+        """An empty sampling list must fail validation, not first-item lookup."""
+        for text in ("Hello", ["Hello", "World"]):
+            with self.subTest(text=text):
+                req = GenerateReqInput(text=text, sampling_params=[])
+                with self.assertRaisesRegex(
+                    ValueError, "sampling_params cannot be an empty list"
+                ):
+                    req.normalize_batch_and_arguments()
+
     def test_sampling_logprobs_mode_normalization(self):
         default_req = copy.deepcopy(self.base_req)
         default_req.normalize_batch_and_arguments()
